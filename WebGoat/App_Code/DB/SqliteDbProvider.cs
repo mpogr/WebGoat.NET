@@ -165,8 +165,9 @@ namespace OWASP.WebGoat.NET.App_Code.DB
             
                 using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
                 {
-                    string sql = "select email from CustomerLogin where customerNumber = " + customerNumber;
+                    string sql = "select email from CustomerLogin where customerNumber = @customerNumber";
                     SQLiteCommand command = new SQLiteCommand(sql, connection);
+                    command.Parameters.AddWithValue("@customerNumber", customerNumber);
                     output = command.ExecuteScalar().ToString();
                 } 
             }
@@ -234,7 +235,7 @@ namespace OWASP.WebGoat.NET.App_Code.DB
 
         public string AddComment(string productCode, string email, string comment)
         {
-            string sql = "insert into Comments(productCode, email, comment) values ('" + productCode + "','" + email + "','" + comment + "');";
+            string sql = "insert into Comments(productCode, email, comment) values (@productCode , @email, @comment)";
             string output = null;
             
             try
@@ -243,6 +244,9 @@ namespace OWASP.WebGoat.NET.App_Code.DB
                 using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
                 {
                     SQLiteCommand command = new SQLiteCommand(sql, connection);
+                    command.Parameters.AddWithValue("@productCode", productCode);
+                    command.Parameters.AddWithValue("@email", email);
+                    command.Parameters.AddWithValue("@comment", comment);
                     command.ExecuteNonQuery();
                 }
             }
@@ -375,12 +379,16 @@ namespace OWASP.WebGoat.NET.App_Code.DB
 
             using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
             {
-                sql = "select * from Products where productCode = '" + productCode + "'";
-                da = new SQLiteDataAdapter(sql, connection);
+                sql = "select * from Products where productCode = @productCode";
+                SQLiteCommand command = new SQLiteCommand(sql, connection);
+                command.Parameters.AddWithValue("@productCode", productCode);
+                da = new SQLiteDataAdapter(command);
                 da.Fill(ds, "products");
 
-                sql = "select * from Comments where productCode = '" + productCode + "'";
-                da = new SQLiteDataAdapter(sql, connection);
+                sql = "select * from Comments where productCode = @productCode";
+                command = new SQLiteCommand(sql, connection);
+                command.Parameters.AddWithValue("@productCode", productCode);
+                da = new SQLiteDataAdapter(command);
                 da.Fill(ds, "comments");
 
                 DataRelation dr = new DataRelation("prod_comments",
