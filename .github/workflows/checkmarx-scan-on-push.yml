@@ -33,7 +33,6 @@ jobs:
     - name: Checkmarx CxFlow Action
       uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.1 #Github Action version
       with:
-        branch=$(echo ${{ github.head_ref }} | cut -d/ -f2)
         project: GitHub-WebGoat.NET-${{ steps.get-branch.outputs.branch }}
         team: /CxServer/OWASP/Dotnet/WebGoat.NET/GitHub
         checkmarx_url: ${{ secrets.CHECKMARX_URL }} # To be stored in GitHub Secrets.
