@@ -200,8 +200,9 @@ namespace OWASP.WebGoat.NET.App_Code.DB
             
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
-                    string sql = "select email from CustomerLogin where customerNumber = " + customerNumber;
+                    string sql = "select email from CustomerLogin where customerNumber = @customerNumber";
                     MySqlCommand command = new MySqlCommand(sql, connection);
+                    command.Parameters.AddWithValue("@customerNumber", customerNumber);
                     output = command.ExecuteScalar().ToString();
                 } 
             }
@@ -270,16 +271,17 @@ namespace OWASP.WebGoat.NET.App_Code.DB
 
         public string AddComment(string productCode, string email, string comment)
         {
-            string sql = "insert into Comments(productCode, email, comment) values ('" + productCode + "','" + email + "','" + comment + "');";
+            string sql = "insert into Comments(productCode, email, comment) values (@productCode=productCode,@email=email,@comment=comment)";
             string output = null;
-            
             try
             {
-
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
                     MySqlCommand command = new MySqlCommand(sql, connection);
+                    command.Parameters.AddWithValue("@productCode", productCode);
+                    command.Parameters.AddWithValue("@email", email);
+                    command.Parameters.AddWithValue("@comment", comment);
                     command.ExecuteNonQuery();
                 }
             }
@@ -412,12 +414,16 @@ namespace OWASP.WebGoat.NET.App_Code.DB
 
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                sql = "select * from Products where productCode = '" + productCode + "'";
-                da = new MySqlDataAdapter(sql, connection);
+                sql = "select * from Products where productCode = @productCode";
+                MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@productCode", productCode);
+                da = new MySqlDataAdapter(command);
                 da.Fill(ds, "products");
 
-                sql = "select * from Comments where productCode = '" + productCode + "'";
-                da = new MySqlDataAdapter(sql, connection);
+                sql = "select * from Comments where productCode = @productCode";
+                command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@productCode", productCode);
+                da = new MySqlDataAdapter(command);
                 da.Fill(ds, "comments");
 
                 DataRelation dr = new DataRelation("prod_comments",
