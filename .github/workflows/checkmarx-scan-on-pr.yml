@@ -35,12 +35,13 @@ jobs:
       with:
         project: GitHub-WebGoat.NET-${{ github.head_ref }}
         team: /CxServer/OWASP/Dotnet/WebGoat.NET/GitHub
+        preset: Checkmarx Default
         checkmarx_url: ${{ secrets.CHECKMARX_URL }}   # To be stored in GitHub Secrets.
         checkmarx_username: ${{ secrets.CHECKMARX_USERNAME }}  # To be stored in GitHub Secrets.
         checkmarx_password: ${{ secrets.CHECKMARX_PASSWORD }}  # To be stored in GitHub Secrets.
         checkmarx_client_secret: ${{ secrets.CHECKMARX_CLIENT_SECRET }}  # To be stored in GitHub Secrets.
-        incremental: true
-        break_build: false
+        incremental: false
+        break_build: true
         scanners: sast
-        bug_tracker: GITHUBPULL
+        bug_tracker: GitHubPull
         params: --namespace=${{ github.repository_owner }} --repo-name=${{ github.event.repository.name }} --branch=${{ github.head_ref }} --merge-id=${{ github.event.number }}
