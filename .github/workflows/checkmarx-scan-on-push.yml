@@ -28,7 +28,7 @@ jobs:
       uses: actions/checkout@v2
     - id: get-branch
       run: |
-        branch=$(echo ${{ github.head_ref }} | cut -d/ -f3)
+        branch=$(echo ${{ github.ref }} | cut -d/ -f3)
         echo "::set-output name=branch::$branch"
     - name: Checkmarx CxFlow Action
       uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.1 #Github Action version
