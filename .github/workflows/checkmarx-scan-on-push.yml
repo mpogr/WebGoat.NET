@@ -26,11 +26,15 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - id: get-branch
+      run: |
+        branch=$(echo ${{ github.head_ref }} | cut -d/ -f2)
+        echo "::set-output name=branch::$branch"
     - name: Checkmarx CxFlow Action
       uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.1 #Github Action version
       with:
         branch=$(echo ${{ github.head_ref }} | cut -d/ -f2)
-        project: GitHub-WebGoat.NET-${branch}
+        project: GitHub-WebGoat.NET-${{steps.get-branch.outputs.branch}}
         team: /CxServer/OWASP/Dotnet/WebGoat.NET/GitHub
         checkmarx_url: ${{ secrets.CHECKMARX_URL }} # To be stored in GitHub Secrets.
         checkmarx_username: ${{ secrets.CHECKMARX_USERNAME }} # To be stored in GitHub Secrets.
