@@ -2,7 +2,7 @@
 #
 # The following GitHub Secrets must be first defined:
 #   - CHECKMARX_URL
-#   - CHECKMARX_USER
+#   - CHECKMARX_USERNAME
 #   - CHECKMARX_PASSWORD
 #   - CHECKMARX_CLIENT_SECRET
 #
@@ -13,7 +13,7 @@
 #
 # For full documentation, including a list of all inputs, please refer to the README https://github.com/checkmarx-ts/checkmarx-cxflow-github-action
 
-name: Checkmarx SAST Scan
+name: Checkmarx SAST Scan on Push
 on:
   push:
     branches:
@@ -39,6 +39,7 @@ jobs:
         checkmarx_username: ${{ secrets.CHECKMARX_USERNAME }} # To be stored in GitHub Secrets.
         checkmarx_password: ${{ secrets.CHECKMARX_PASSWORD }} # To be stored in GitHub Secrets.
         checkmarx_client_secret: ${{ secrets.CHECKMARX_CLIENT_SECRET }} # To be stored in GitHub Secrets.
+        github_token: ${{ secrets.GH_TOKEN }}
         incremental: false
         break_build: false
         scanners: sast
