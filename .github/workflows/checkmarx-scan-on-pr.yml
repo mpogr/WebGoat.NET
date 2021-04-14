@@ -2,7 +2,7 @@
 #
 # The following GitHub Secrets must be first defined:
 #   - CHECKMARX_URL
-#   - CHECKMARX_USER
+#   - CHECKMARX_USERNAME
 #   - CHECKMARX_PASSWORD
 #   - CHECKMARX_CLIENT_SECRET
 #   - GH_TOKEN
@@ -11,7 +11,7 @@
 #
 # For full documentation,including a list of all inputs, please refer to the README https://github.com/checkmarx-ts/checkmarx-cxflow-github-action
 
-name: CxFlow-GitHub-Pull-Request
+name: Checkmarx SAST Scan on Pull Request
 
 # Controls when the action will run. Triggers the workflow on push or pull request events but only for the master branch
 on:
@@ -44,5 +44,5 @@ jobs:
         incremental: false
         break_build: false
         scanners: sast
-        bug_tracker: GITHUBPULL
+        bug_tracker: GitHubPull
         params: --namespace=${{ github.repository_owner }} --repo-name=${{ github.event.repository.name }} --branch=${{ github.head_ref }} --merge-id=${{ github.event.number }}
